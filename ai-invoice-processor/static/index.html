@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Invoice Processor</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <header class="header">
+            <div>
+                <h1>AI Invoice Processor</h1>
+                <p>
+                    Automatically validate invoices against company policies
+                    and purchase orders.
+                </p>
+            </div>
+
+            <div class="status-badge">
+                <span class="status-dot"></span>
+                System Ready
+            </div>
+        </header>
+
+
+        <!-- Folder Selection -->
+        <section class="card">
+
+            <div class="section-title">
+                <h2>1. Select Folders</h2>
+                <p>Select the folders containing your invoices and purchase orders.</p>
+            </div>
+
+
+            <!-- Invoice Folder -->
+            <div class="folder-box">
+
+                <div class="folder-info">
+                    <div class="folder-icon">
+                        📄
+                    </div>
+
+                    <div>
+                        <h3>Invoice Folder</h3>
+
+                        <p id="invoice-folder-name">
+                            No folder selected
+                        </p>
+
+                        <span id="invoice-count" class="file-count">
+                            0 PDF files
+                        </span>
+                    </div>
+                </div>
+
+                <label class="select-button">
+                    Select Folder
+
+                    <input
+                        type="file"
+                        id="invoice-folder"
+                        webkitdirectory
+                        directory
+                        multiple
+                        accept=".pdf"
+                    >
+                </label>
+
+            </div>
+
+
+            <!-- PO Folder -->
+            <div class="folder-box">
+
+                <div class="folder-info">
+
+                    <div class="folder-icon">
+                        📋
+                    </div>
+
+                    <div>
+                        <h3>Purchase Order Folder</h3>
+
+                        <p id="po-folder-name">
+                            No folder selected
+                        </p>
+
+                        <span id="po-count" class="file-count">
+                            0 PDF files
+                        </span>
+                    </div>
+
+                </div>
+
+                <label class="select-button">
+                    Select Folder
+
+                    <input
+                        type="file"
+                        id="po-folder"
+                        webkitdirectory
+                        directory
+                        multiple
+                        accept=".pdf"
+                    >
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <!-- Processing -->
+        <section class="card">
+
+            <div class="section-title">
+                <h2>2. Process Invoices</h2>
+
+                <p>
+                    Each invoice will be checked against company policies
+                    before its matching purchase order is validated.
+                </p>
+            </div>
+
+
+            <div class="workflow">
+
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <span>Read Invoice</span>
+                </div>
+
+                <div class="workflow-arrow">→</div>
+
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <span>Check Policy</span>
+                </div>
+
+                <div class="workflow-arrow">→</div>
+
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <span>Find PO</span>
+                </div>
+
+                <div class="workflow-arrow">→</div>
+
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <span>Compare</span>
+                </div>
+
+                <div class="workflow-arrow">→</div>
+
+                <div class="workflow-step">
+                    <div class="step-number">5</div>
+                    <span>Decision</span>
+                </div>
+
+            </div>
+
+
+            <button
+                id="process-button"
+                class="process-button"
+                disabled
+            >
+                <span id="button-text">Process Invoices</span>
+
+                <span
+                    id="button-spinner"
+                    class="spinner hidden"
+                ></span>
+            </button>
+
+
+            <!-- Progress -->
+            <div
+                id="progress-container"
+                class="progress-container hidden"
+            >
+
+                <div class="progress-header">
+                    <span id="progress-text">
+                        Processing invoices...
+                    </span>
+
+                    <span id="progress-percentage">
+                        0%
+                    </span>
+                </div>
+
+                <div class="progress-bar">
+                    <div
+                        id="progress-fill"
+                        class="progress-fill"
+                    ></div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Summary -->
+        <section
+            id="summary-section"
+            class="card hidden"
+        >
+
+            <div class="section-title">
+                <h2>Processing Summary</h2>
+
+                <p>
+                    Results from the invoice validation process.
+                </p>
+            </div>
+
+
+            <div class="summary-cards">
+
+                <div class="summary-card total">
+
+                    <span class="summary-label">
+                        Total
+                    </span>
+
+                    <span
+                        id="total-count"
+                        class="summary-value"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="summary-card passed">
+
+                    <span class="summary-label">
+                        Passed
+                    </span>
+
+                    <span
+                        id="passed-count"
+                        class="summary-value"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <div class="summary-card review">
+
+                    <span class="summary-label">
+                        Review Required
+                    </span>
+
+                    <span
+                        id="review-count"
+                        class="summary-value"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Results -->
+        <section
+            id="results-section"
+            class="card hidden"
+        >
+
+            <div class="section-title">
+
+                <h2>Invoice Results</h2>
+
+                <p>
+                    Review the validation status and remarks for each invoice.
+                </p>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Invoice</th>
+                            <th>PO</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="results-body">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Error -->
+        <div
+            id="error-message"
+            class="error-message hidden"
+        >
+        </div>
+
+
+        <!-- Footer -->
+        <footer>
+
+            <p>
+                AI Automated Invoice Processor
+            </p>
+
+            <span>
+                Invoice → Policy → PO → Validation → Decision
+            </span>
+
+        </footer>
+
+    </div>
+
+
+    <script src="/static/script.js"></script>
+
+</body>
+</html>
